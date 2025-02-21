@@ -1,18 +1,18 @@
 package routes
 
 import (
-	"go-app/handlers"
+	"go-app/controllers"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes() *mux.Router {
-	router := mux.NewRouter()
-	userHandler := handlers.NewUserHandler()
-
-	router.HandleFunc("/users", userHandler.CreateUser).Methods("POST")
-	router.HandleFunc("/users/{id}", userHandler.GetUserByID).Methods("GET")
-	router.HandleFunc("/users", userHandler.GetAllUsers).Methods("GET")
-
-	return router
+func UserRoutes(router *gin.Engine) {
+	userGroup := router.Group("/users")
+	{
+		userGroup.POST("/", controllers.CreateUser)
+		userGroup.GET("/", controllers.GetUsers)
+		userGroup.GET("/:id", controllers.GetUserByID)
+		userGroup.PUT("/:id", controllers.UpdateUser)
+		userGroup.DELETE("/:id", controllers.DeleteUser)
+	}
 }

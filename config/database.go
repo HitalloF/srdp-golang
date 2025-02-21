@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"go-app/models"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -17,6 +18,12 @@ func ConnectDatabase() {
 		log.Fatal("Erro ao conectar ao banco de dados:", err)
 	}
 
+	// Migrar tabelas automaticamente
+	err = database.AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatal("Erro ao migrar banco de dados:", err)
+	}
+
 	DB = database
-	fmt.Println("Banco de dados conectado com sucesso!")
+	fmt.Println("Banco de dados conectado e migrado com sucesso!")
 }
